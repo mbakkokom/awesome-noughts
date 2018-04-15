@@ -1,13 +1,22 @@
 #include "NoughtsWindow.hpp"
 
 #include <iostream>
+#include <string>
 
 NoughtsWindow::NoughtsWindow()
 {
-    set_title ("aweome-noughts");
+    GdkGeometry g;
+    g.min_width = 300;
+    g.min_height = 300;
+    g.min_aspect = 1.0;
+    g.max_aspect = 1.0;
+    set_geometry_hints(mCanvas, g, (Gdk::WindowHints) Gdk::HINT_MIN_SIZE | Gdk::HINT_ASPECT);
+
+    set_title ("awesome-noughts");
     set_default_size(200, 200);
     set_titlebar(mHeader);
 
+    mHeader.set_subtitle ("Click 'New Game' first!");
     mHeader.pack_start(mNewGameButton);
     //add(mGrid);
     add(mCanvas);
@@ -25,7 +34,17 @@ NoughtsWindow::NoughtsWindow()
 }
 
 NoughtsWindow::~NoughtsWindow() {
+    NoughtsGame *last = mCanvas.getGameEx();
 
+    if (lastConnection.connected() == true) {
+        lastConnection.disconnect();
+    }
+
+    if (last != nullptr) {
+        delete last;
+    }
+
+    mCanvas.setGameEx(nullptr);
 }
 
 /*
@@ -35,10 +54,45 @@ bool NoughtsWindow::on_configure_event(GdkEventConfigure* evt) {
 }
 */
 
-void NoughtsWindow::new_game() {
-    std::cout << "New game called!" << std::endl;
+void NoughtsWindow::on_game_event(NoughtsGame::GameStatus status, NoughtsGame::PlayerTurn turn) {
+    std::cout << "NoughtsWindow::on_game_event" << std::endl;
+
+    std::string st;
+
+    switch(status) {
+    case NoughtsGame::GAME_RUNNING:
+        st = (turn == NoughtsGame::PLAYER_CROSS) ? "X" : "O";
+        st += "'s turn";
+        break;
+    case NoughtsGame::GAME_WON:
+        st = (turn == NoughtsGame::PLAYER_CROSS) ? "X" : "O";
+        st += " won!";
+        break;
+    case NoughtsGame::GAME_DRAW:
+        st = "Draw!";
+        break;
+    }
+
+    mHeader.set_subtitle(st);
+
 }
 
-void NoughtsWindow::grid_button_click(size_t id) {
-    std::cout << "Clicked grid at " << id << std::endl;
+void NoughtsWindow::new_game() {
+    std::cout << "NoughtsWindow::new_game" << std::endl;
+
+    NoughtsGame *nw = new NoughtsGame(),
+                *old = mCanvas.getGameEx();
+
+    if (lastConnection.connected() == true) {
+        lastConnection.disconnect();
+    }
+
+    if (old != nullptr) {
+        delete old;
+    }
+
+    lastConnection = nw->signal_game_event().connect(sigc::mem_fun(*this, &NoughtsWindow::on_game_event));
+    on_game_event((NoughtsGame::GameStatus) nw->getState(), nw->getTurn());
+
+    mCanvas.setGameEx(nw);
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sigc++/sigc++.h>
+
 class NoughtsGame {
 public:
     static constexpr int INVALID_COORD = -1;
@@ -35,12 +37,14 @@ public:
     PlayerTurn getTile(int x, int y);
     GameCoord getStroke();
 
-    bool setTile(int x, int y);
+    bool playTile(int x, int y);
     void setPlayer(PlayerTurn player);
     void togglePlayer();
 
+    typedef sigc::signal<void, NoughtsGame::GameStatus, NoughtsGame::PlayerTurn> GameEventSignal;
+    GameEventSignal signal_game_event();
 protected:
-    void boardCheck();
+    int boardCheck();
 
     PlayerTurn mTiles[9] = { PLAYER_NONE };
 
@@ -48,4 +52,6 @@ protected:
     PlayerTurn mTurn = PLAYER_CROSS;
 
     GameCoord mStroke = { .direction = STROKE_NONE, .x = INVALID_COORD, .y = INVALID_COORD };
+private:
+    GameEventSignal game_event;
 };

@@ -10,12 +10,16 @@ public:
     NoughtsWindow();
     ~NoughtsWindow();
 
-    void new_game();
-    void grid_button_click(size_t id);
+    virtual void new_game() final;
 protected:
 	//bool on_configure_event(GdkEventConfigure* evt);
 
     Gtk::HeaderBar mHeader;
     Gtk::Button mNewGameButton;
     NoughtsCanvas mCanvas;
+
+
+    void on_game_event(NoughtsGame::GameStatus status, NoughtsGame::PlayerTurn turn);
+private:
+	sigc::connection lastConnection;
 };
