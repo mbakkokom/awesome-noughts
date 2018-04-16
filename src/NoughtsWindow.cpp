@@ -3,6 +3,11 @@
 #include <iostream>
 #include <string>
 
+#ifdef WITH_RANDOM_AI
+// RandomAI AI function declaration
+#include "RandomAI"
+#endif
+
 NoughtsWindow::NoughtsWindow()
 {
     GdkGeometry g;
@@ -54,7 +59,7 @@ bool NoughtsWindow::on_configure_event(GdkEventConfigure* evt) {
 }
 */
 
-void NoughtsWindow::on_game_event(NoughtsGame::GameStatus status, NoughtsGame::PlayerTurn turn) {
+void NoughtsWindow::on_game_event(NoughtsGame *game, NoughtsGame::GameStatus status, NoughtsGame::PlayerTurn turn) {
     std::cout << "NoughtsWindow::on_game_event" << std::endl;
 
     std::string st;
@@ -75,6 +80,12 @@ void NoughtsWindow::on_game_event(NoughtsGame::GameStatus status, NoughtsGame::P
 
     mHeader.set_subtitle(st);
 
+#ifdef WITH_RANDOM_AI
+    // TODO. check return value.
+    if (!NoughtsAI(game))
+        std::cout << "fixme::NoughtsWindow::on_game_event NoughtsAI(nw) returns false" << std::endl;
+#endif
+
 }
 
 void NoughtsWindow::new_game() {
@@ -92,7 +103,8 @@ void NoughtsWindow::new_game() {
     }
 
     lastConnection = nw->signal_game_event().connect(sigc::mem_fun(*this, &NoughtsWindow::on_game_event));
-    on_game_event((NoughtsGame::GameStatus) nw->getState(), nw->getTurn());
+    on_game_event(nw, (NoughtsGame::GameStatus) nw->getState(), nw->getTurn());
 
     mCanvas.setGameEx(nw);
+
 }

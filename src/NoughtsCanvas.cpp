@@ -109,7 +109,7 @@ void drawStrokeHorizontal(const Cairo::RefPtr<Cairo::Context>& cr, size_t y) {
 
 	cr->save();
 
-	cr->set_source_rgb(1.0, 0.2196, 0.0); // #FF9800
+	cr->set_source_rgba(1.0, 0.2196, 0.0, 0.85); // #FF9800
 
 	cr->set_line_cap(Cairo::LINE_CAP_ROUND);
 	cr->set_line_width(0.085);
@@ -130,7 +130,7 @@ void drawStrokeVertical(const Cairo::RefPtr<Cairo::Context>& cr, size_t x) {
 
 	cr->save();
 
-	cr->set_source_rgb(1.0, 0.2196, 0.0); // #FF9800
+	cr->set_source_rgba(1.0, 0.2196, 0.0, 0.85); // #FF9800
 
 	cr->set_line_cap(Cairo::LINE_CAP_ROUND);
 	cr->set_line_width(0.085);
@@ -154,7 +154,7 @@ void drawStrokeDiagonal(const Cairo::RefPtr<Cairo::Context>& cr, size_t x) {
 
 	cr->save();
 
-	cr->set_source_rgb(1.0, 0.2196, 0.0); // #FF9800
+	cr->set_source_rgba(1.0, 0.2196, 0.0, 0.85); // #FF9800
 
 	cr->set_line_cap(Cairo::LINE_CAP_ROUND);
 	cr->set_line_width(0.085);

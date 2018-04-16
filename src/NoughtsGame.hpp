@@ -32,16 +32,17 @@ public:
         int y;
     } GameCoord;
 
-    int getState();
+    int getState(); // TODO. should just return a GameStatus.
     PlayerTurn getTurn();
     PlayerTurn getTile(int x, int y);
     GameCoord getStroke();
 
     bool playTile(int x, int y);
+    void setTile(int x, int y, NoughtsGame::PlayerTurn player);
     void setPlayer(PlayerTurn player);
     void togglePlayer();
 
-    typedef sigc::signal<void, NoughtsGame::GameStatus, NoughtsGame::PlayerTurn> GameEventSignal;
+    typedef sigc::signal<void, NoughtsGame*, NoughtsGame::GameStatus, NoughtsGame::PlayerTurn> GameEventSignal;
     GameEventSignal signal_game_event();
 protected:
     int boardCheck();

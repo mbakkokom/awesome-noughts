@@ -19,7 +19,7 @@ protected:
     NoughtsCanvas mCanvas;
 
 
-    void on_game_event(NoughtsGame::GameStatus status, NoughtsGame::PlayerTurn turn);
+    void on_game_event(NoughtsGame *game, NoughtsGame::GameStatus status, NoughtsGame::PlayerTurn turn);
 private:
 	sigc::connection lastConnection;
 };

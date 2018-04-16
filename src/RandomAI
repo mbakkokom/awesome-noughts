@@ -1,0 +1,22 @@
+#warning RandomAI is included!
+
+bool NoughtsAI(NoughtsGame *game) {
+	NoughtsGame::GameStatus state = (NoughtsGame::GameStatus) game->getState();
+	NoughtsGame::PlayerTurn turn = game->getTurn();
+
+	// change to `... || turn != NoughtsGame::PLAYER_CROSS)` if required.
+	if (state != NoughtsGame::GAME_RUNNING || turn != NoughtsGame::PLAYER_NOUGHT)
+		return false;
+
+	// BEGIN AI CODE
+	// use game->getTile(x, y) -> returns the tile status NoughtsGame::PLAYER_NONE,
+	//							  NoughtsGame::PLAYER_CROSS, NoughtsGame::PLAYER_NOUGHT
+	// use game->playTile(x, y) -> check if returns false
+	// don't touch other things except necessary
+
+	std::cout << "fixme::NoughtsAI(game) state=" << state << " turn=" << turn << std::endl;
+
+	// END   AI CODE
+
+	return true;
+}

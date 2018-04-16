@@ -38,10 +38,20 @@ bool NoughtsGame::playTile(int x, int y) {
 		if (boardCheck() == GAME_RUNNING)
 			togglePlayer();
 
-		game_event.emit((GameStatus) mState, mTurn);
+		game_event.emit(this, (GameStatus) mState, mTurn);
 	}
 
 	return true;
+}
+
+void NoughtsGame::setTile(int x, int y, NoughtsGame::PlayerTurn player) {
+	int id = (y * 3) + x;
+
+	if (x < 0 || x >= 3 || y < 0 || y >= 3) {
+		return;
+	}
+
+	mTiles[id] = player;
 }
 
 void NoughtsGame::setPlayer(NoughtsGame::PlayerTurn player) {
