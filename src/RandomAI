@@ -14,6 +14,21 @@ bool NoughtsAI(NoughtsGame *game) {
 	// use game->playTile(x, y) -> check if returns false
 	// don't touch other things except necessary
 
+	NoughtsGame::PlayerTurn value;
+	int x;
+	int y;
+
+		do{
+			x = rand()%3;
+			y = rand()%3;
+			value = game->getTile(x,y);
+		}while(value != NoughtsGame::PLAYER_NONE);
+
+	bool success = game->playTile(x,y);
+
+	if(success == false)
+		return false;
+		
 	std::cout << "fixme::NoughtsAI(game) state=" << state << " turn=" << turn << std::endl;
 
 	// END   AI CODE
